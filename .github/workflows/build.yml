@@ -6,6 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -20,18 +23,11 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pillow pyinstaller
+        run: pip install pillow pyinstaller
 
       - name: Build exe
-        run: |
-          pyinstaller --onefile --windowed `
-            --name "ORSPEX PDF Compressor" `
-            --icon "assets\orspex.ico" `
-            --add-data "assets\orspex.ico;assets" `
-            --add-data "assets\orspex.png;assets" `
-            pdf_compressor.py
+        shell: cmd
+        run: pyinstaller --onefile --windowed --name "ORSPEX PDF Compressor" --icon "assets\orspex.ico" --add-data "assets\orspex.ico;assets" --add-data "assets\orspex.png;assets" pdf_compressor.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -44,5 +40,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/ORSPEX PDF Compressor.exe
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
