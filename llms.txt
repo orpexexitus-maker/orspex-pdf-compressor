@@ -1,0 +1,14 @@
+# ORSPEX PDF Compressor
+
+> Free, browser-based PDF compressor. Files are compressed locally on the user's device — nothing is uploaded to any server.
+
+## Links
+
+- Web App: https://orspex-pdf-compressor.vercel.app/
+- Source: https://github.com/orpexexitus-maker/orspex-pdf-compressor
+
+## Features
+
+- 100% client-side compression with pdf-lib
+- No uploads, no signup, no watermark
+- Works on Windows, macOS, Linux, Chromebook, iPad

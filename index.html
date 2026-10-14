@@ -10,6 +10,9 @@
 <meta name="robots" content="index, follow" />
 <meta name="theme-color" content="#0F172A" />
 
+<!-- Google Search Console verification -->
+<meta name="google-site-verification" content="7hrdmkpelJvnCzvdVucP78Fp_mSRRFqVUJDTbeybD3o" />
+
 <!-- Canonical -->
 <link rel="canonical" href="https://orspex-pdf-compressor.vercel.app/" />
 
@@ -209,19 +212,16 @@ footer a{color:#6EE7A0;text-decoration:none}
     if (files.length) handleFile(files[0]);
   });
 
-  // FIX: prevent double-trigger when clicking the inner button
   chooseBtn.addEventListener('click', function(e){
     e.stopPropagation();
     fileInput.click();
   });
 
   dropzone.addEventListener('click', function(e){
-    // If the click originated inside the button, the button handler already handled it.
     if (e.target === chooseBtn || chooseBtn.contains(e.target)) return;
     fileInput.click();
   });
 
-  // Keyboard accessibility for the dropzone
   dropzone.addEventListener('keydown', function(e){
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
