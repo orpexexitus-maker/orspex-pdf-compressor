@@ -1,10 +1,61 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ORSPEX PDF Compressor - Free Online + Windows App</title>
-<meta name="description" content="Compress PDF files free in your browser or with the ORSPEX PDF Compressor Windows app." />
+<meta name="description" content="Compress PDF files free in your browser. 100% private, no upload, no signup, no watermark. Also available as a Windows desktop app." />
+<meta name="keywords" content="pdf compressor, compress pdf, free pdf compressor, online pdf compressor, reduce pdf size, pdf compressor windows" />
+<meta name="author" content="ORSPEX" />
+<meta name="robots" content="index, follow" />
+<meta name="theme-color" content="#0F172A" />
+
+<!-- Canonical -->
+<link rel="canonical" href="https://orspex-pdf-compressor.vercel.app/" />
+
+<!-- Manifest + Icons -->
+<link rel="manifest" href="/site.webmanifest" />
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+<link rel="apple-touch-icon" href="/icon-192.png" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ORSPEX PDF Compressor — Free, Private, Instant" />
+<meta property="og:description" content="Compress PDFs in your browser. Nothing uploaded. No signup. No watermark." />
+<meta property="og:url" content="https://orspex-pdf-compressor.vercel.app/" />
+<meta property="og:image" content="https://orspex-pdf-compressor.vercel.app/icon-512.png" />
+<meta property="og:site_name" content="ORSPEX PDF Compressor" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ORSPEX PDF Compressor — Free, Private, Instant" />
+<meta name="twitter:description" content="Compress PDFs in your browser. Nothing uploaded. No signup. No watermark." />
+<meta name="twitter:image" content="https://orspex-pdf-compressor.vercel.app/icon-512.png" />
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "ORSPEX PDF Compressor",
+  "url": "https://orspex-pdf-compressor.vercel.app/",
+  "description": "Free browser-based PDF compressor. Files are compressed locally on your device — nothing is uploaded.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any (Web), Windows 10, Windows 11",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "ORSPEX",
+    "url": "https://orpexexitus-maker.github.io/orspex/"
+  }
+}
+</script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;color:#1E293B;line-height:1.6;background:#fff}
@@ -52,6 +103,14 @@ section.alt{background:#F8FAFC}
 .windows-card .meta{font-size:13px;color:#94A3B8;margin-top:18px}
 footer{background:#0F172A;color:#CBD5E1;text-align:center;padding:40px 24px;font-size:13.5px}
 footer a{color:#6EE7A0;text-decoration:none}
+@media (max-width:640px){
+  .hero h1{font-size:36px;letter-spacing:-1px}
+  .hero{padding:56px 0 72px}
+  .section-title{font-size:26px}
+  .compressor-card{margin:0 12px}
+  .dropzone{padding:40px 20px;margin:16px}
+  .windows-card{padding:36px 24px}
+}
 </style>
 </head>
 <body>
@@ -63,28 +122,28 @@ footer a{color:#6EE7A0;text-decoration:none}
     <p>Drop your PDF below. It gets compressed in your browser - nothing is uploaded to any server. Or download the full-featured Windows app.</p>
 
     <div class="compressor-card">
-      <div class="dropzone" id="dropzone">
-        <span class="dropzone-icon">&#128196;</span>
+      <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Drop PDF here or click to browse">
+        <span class="dropzone-icon" aria-hidden="true">&#128196;</span>
         <h3>Drop your PDF here</h3>
         <p>or click to browse files</p>
-        <button class="btn btn-green btn-lg" onclick="document.getElementById('fileInput').click()">Choose PDF File</button>
-        <input type="file" id="fileInput" accept="application/pdf" />
+        <button type="button" class="btn btn-green btn-lg" id="chooseBtn">Choose PDF File</button>
+        <input type="file" id="fileInput" accept="application/pdf,.pdf" aria-hidden="true" />
       </div>
 
-      <div class="result" id="result">
+      <div class="result" id="result" aria-live="polite">
         <h3>&#9989; Compression Complete</h3>
         <p id="resultFilename">your-file.pdf</p>
-        <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="progress" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
         <div class="result-stats">
           <div><div class="stat-label">Before</div><div class="stat-value" id="sizeBefore">-</div></div>
           <div><div class="stat-label">After</div><div class="stat-value green" id="sizeAfter">-</div></div>
           <div><div class="stat-label">Saved</div><div class="stat-value green" id="percentSaved">-</div></div>
         </div>
         <a class="btn btn-green btn-lg" id="downloadBtn" download>&#11015; Download Compressed PDF</a>
-        <button class="btn btn-outline btn-lg" style="margin-left:8px" onclick="resetUI()">Compress Another</button>
+        <button type="button" class="btn btn-outline btn-lg" style="margin-left:8px" id="resetBtn">Compress Another</button>
       </div>
 
-      <div class="error-msg" id="errorMsg" style="display:none"></div>
+      <div class="error-msg" id="errorMsg" role="alert" style="display:none"></div>
     </div>
   </div>
 </section>
@@ -94,12 +153,12 @@ footer a{color:#6EE7A0;text-decoration:none}
     <h2 class="section-title">Why use ORSPEX PDF Compressor?</h2>
     <p class="section-subtitle">Fast, private, and free.</p>
     <div class="features-grid">
-      <div class="feature"><span class="feature-icon">&#128274;</span><h4>100% Private</h4><p>Your file never leaves your computer.</p></div>
-      <div class="feature"><span class="feature-icon">&#9889;</span><h4>Instant</h4><p>No upload, no queue, no waiting.</p></div>
-      <div class="feature"><span class="feature-icon">&#128187;</span><h4>Works Everywhere</h4><p>Windows, Mac, Linux, Chromebook, iPad.</p></div>
-      <div class="feature"><span class="feature-icon">&#127381;</span><h4>Totally Free</h4><p>No signup, no watermark, no limits.</p></div>
-      <div class="feature"><span class="feature-icon">&#128230;</span><h4>No Install</h4><p>Just open the page and use it.</p></div>
-      <div class="feature"><span class="feature-icon">&#129418;</span><h4>Windows App Available</h4><p>Want stronger compression? Download the desktop version.</p></div>
+      <div class="feature"><span class="feature-icon" aria-hidden="true">&#128274;</span><h4>100% Private</h4><p>Your file never leaves your computer.</p></div>
+      <div class="feature"><span class="feature-icon" aria-hidden="true">&#9889;</span><h4>Instant</h4><p>No upload, no queue, no waiting.</p></div>
+      <div class="feature"><span class="feature-icon" aria-hidden="true">&#128187;</span><h4>Works Everywhere</h4><p>Windows, Mac, Linux, Chromebook, iPad.</p></div>
+      <div class="feature"><span class="feature-icon" aria-hidden="true">&#127381;</span><h4>Totally Free</h4><p>No signup, no watermark, no limits.</p></div>
+      <div class="feature"><span class="feature-icon" aria-hidden="true">&#128230;</span><h4>No Install</h4><p>Just open the page and use it.</p></div>
+      <div class="feature"><span class="feature-icon" aria-hidden="true">&#129418;</span><h4>Windows App Available</h4><p>Want stronger compression? Download the desktop version.</p></div>
     </div>
   </div>
 </section>
@@ -123,49 +182,142 @@ footer a{color:#6EE7A0;text-decoration:none}
 
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
-var dropzone=document.getElementById('dropzone'),fileInput=document.getElementById('fileInput'),result=document.getElementById('result'),errorMsg=document.getElementById('errorMsg'),progressBar=document.getElementById('progressBar');
-['dragenter','dragover'].forEach(function(ev){dropzone.addEventListener(ev,function(e){e.preventDefault();dropzone.classList.add('dragover')})});
-['dragleave','drop'].forEach(function(ev){dropzone.addEventListener(ev,function(e){e.preventDefault();dropzone.classList.remove('dragover')})});
-dropzone.addEventListener('drop',function(e){var files=e.dataTransfer.files;if(files.length)handleFile(files[0])});
-dropzone.addEventListener('click',function(){fileInput.click()});
-fileInput.addEventListener('change',function(e){if(e.target.files.length)handleFile(e.target.files[0])});
-function formatBytes(bytes){if(bytes===0)return '0 B';var k=1024,sizes=['B','KB','MB','GB'];var i=Math.floor(Math.log(bytes)/Math.log(k));return (bytes/Math.pow(k,i)).toFixed(1)+' '+sizes[i]}
-function resetUI(){fileInput.value='';result.classList.remove('active');dropzone.style.display='block';errorMsg.style.display='none';progressBar.style.width='0%'}
-function showError(msg){errorMsg.textContent='Failed: '+msg;errorMsg.style.display='block';dropzone.style.display='block';result.classList.remove('active')}
-async function handleFile(file){
-  errorMsg.style.display='none';
-  if(file.type!=='application/pdf'&&!file.name.toLowerCase().endsWith('.pdf')){return showError('Please select a PDF file.')}
-  dropzone.style.display='none';
-  result.classList.add('active');
-  document.getElementById('resultFilename').textContent=file.name;
-  document.getElementById('sizeBefore').textContent=formatBytes(file.size);
-  document.getElementById('sizeAfter').textContent='...';
-  document.getElementById('percentSaved').textContent='...';
-  progressBar.style.width='20%';
-  try{
-    var arrayBuffer=await file.arrayBuffer();
-    progressBar.style.width='50%';
-    var pdfDoc=await PDFLib.PDFDocument.load(arrayBuffer,{ignoreEncryption:true});
-    pdfDoc.setTitle('');pdfDoc.setAuthor('');pdfDoc.setSubject('');pdfDoc.setKeywords([]);pdfDoc.setProducer('');pdfDoc.setCreator('');
-    progressBar.style.width='75%';
-    var compressedBytes=await pdfDoc.save({useObjectStreams:true,addDefaultPage:false});
-    progressBar.style.width='100%';
-    var blob=new Blob([compressedBytes],{type:'application/pdf'});
-    var url=URL.createObjectURL(blob);
-    var downloadBtn=document.getElementById('downloadBtn');
-    var outName=file.name.replace(/\.pdf$/i,'')+'-compressed.pdf';
-    downloadBtn.href=url;
-    downloadBtn.download=outName;
-    var newSize=blob.size,oldSize=file.size;
-    var saved=oldSize>0?Math.max(0,((oldSize-newSize)/oldSize*100)):0;
-    document.getElementById('sizeAfter').textContent=formatBytes(newSize);
-    document.getElementById('percentSaved').textContent=saved.toFixed(1)+'%';
-    setTimeout(function(){downloadBtn.click()},400);
-  }catch(err){
-    console.error(err);
-    showError('Could not compress this PDF. Try the Windows app instead.');
+(function(){
+  var dropzone = document.getElementById('dropzone');
+  var fileInput = document.getElementById('fileInput');
+  var result = document.getElementById('result');
+  var errorMsg = document.getElementById('errorMsg');
+  var progressBar = document.getElementById('progressBar');
+  var chooseBtn = document.getElementById('chooseBtn');
+  var resetBtn = document.getElementById('resetBtn');
+
+  ['dragenter','dragover'].forEach(function(ev){
+    dropzone.addEventListener(ev, function(e){
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+  });
+  ['dragleave','drop'].forEach(function(ev){
+    dropzone.addEventListener(ev, function(e){
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+    });
+  });
+
+  dropzone.addEventListener('drop', function(e){
+    var files = e.dataTransfer.files;
+    if (files.length) handleFile(files[0]);
+  });
+
+  // FIX: prevent double-trigger when clicking the inner button
+  chooseBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    fileInput.click();
+  });
+
+  dropzone.addEventListener('click', function(e){
+    // If the click originated inside the button, the button handler already handled it.
+    if (e.target === chooseBtn || chooseBtn.contains(e.target)) return;
+    fileInput.click();
+  });
+
+  // Keyboard accessibility for the dropzone
+  dropzone.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
+
+  fileInput.addEventListener('change', function(e){
+    if (e.target.files.length) handleFile(e.target.files[0]);
+  });
+
+  resetBtn.addEventListener('click', resetUI);
+
+  function formatBytes(bytes){
+    if (bytes === 0) return '0 B';
+    var k = 1024;
+    var sizes = ['B','KB','MB','GB'];
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
   }
-}
+
+  function resetUI(){
+    fileInput.value = '';
+    result.classList.remove('active');
+    dropzone.style.display = 'block';
+    errorMsg.style.display = 'none';
+    progressBar.style.width = '0%';
+  }
+
+  function showError(msg){
+    errorMsg.textContent = 'Failed: ' + msg;
+    errorMsg.style.display = 'block';
+    dropzone.style.display = 'block';
+    result.classList.remove('active');
+  }
+
+  async function handleFile(file){
+    errorMsg.style.display = 'none';
+
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      return showError('Please select a PDF file.');
+    }
+
+    dropzone.style.display = 'none';
+    result.classList.add('active');
+
+    document.getElementById('resultFilename').textContent = file.name;
+    document.getElementById('sizeBefore').textContent = formatBytes(file.size);
+    document.getElementById('sizeAfter').textContent = '...';
+    document.getElementById('percentSaved').textContent = '...';
+    progressBar.style.width = '20%';
+
+    try {
+      var arrayBuffer = await file.arrayBuffer();
+      progressBar.style.width = '50%';
+
+      var pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+
+      pdfDoc.setTitle('');
+      pdfDoc.setAuthor('');
+      pdfDoc.setSubject('');
+      pdfDoc.setKeywords([]);
+      pdfDoc.setProducer('');
+      pdfDoc.setCreator('');
+
+      progressBar.style.width = '75%';
+
+      var compressedBytes = await pdfDoc.save({
+        useObjectStreams: true,
+        addDefaultPage: false
+      });
+
+      progressBar.style.width = '100%';
+
+      var blob = new Blob([compressedBytes], { type: 'application/pdf' });
+      var url = URL.createObjectURL(blob);
+
+      var downloadBtn = document.getElementById('downloadBtn');
+      var outName = file.name.replace(/\.pdf$/i, '') + '-compressed.pdf';
+      downloadBtn.href = url;
+      downloadBtn.download = outName;
+
+      var newSize = blob.size;
+      var oldSize = file.size;
+      var saved = oldSize > 0 ? Math.max(0, ((oldSize - newSize) / oldSize) * 100) : 0;
+
+      document.getElementById('sizeAfter').textContent = formatBytes(newSize);
+      document.getElementById('percentSaved').textContent = saved.toFixed(1) + '%';
+
+      setTimeout(function(){ downloadBtn.click(); }, 400);
+    } catch (err) {
+      console.error(err);
+      showError('Could not compress this PDF. Try the Windows app instead.');
+    }
+  }
+})();
 </script>
 </body>
 </html>
