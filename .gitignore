@@ -10,3 +10,4 @@ venv/
 *.pdf
 *.ini
 .DS_Store
+.vercel
